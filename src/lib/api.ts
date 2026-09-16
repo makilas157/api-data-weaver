@@ -32,7 +32,7 @@ import {
  * While VITE_API_BASE_URL is not configured, the bundled content in
  * src/data/site.ts is used so the site still renders.
  */
-export const API_BASE_URL: string | undefined = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL: string | undefined = import.meta.env["VITE_API_BASE_URL"];
 
 /* ---------- Request / response types ---------- */
 
