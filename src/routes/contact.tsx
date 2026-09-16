@@ -6,8 +6,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { SocialSection } from "@/components/SocialSection";
+import { socialsQuery, submitContact, type ContactMessage } from "@/lib/api";
 
 export const Route = createFileRoute("/contact")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(socialsQuery),
   head: () => ({
     meta: [
       { title: "Contact Tevexxo — Start a project" },
@@ -55,11 +57,26 @@ function ContactPage() {
           <Reveal variant="card" delay={300}>
             <form
               className="glass-panel space-y-5 p-8"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                setSent(true);
-                toast.success("Thanks — we'll be in touch within one working day.");
-                (e.currentTarget as HTMLFormElement).reset();
+                const form = e.currentTarget as HTMLFormElement;
+                const data = new FormData(form);
+                const payload: ContactMessage = {
+                  name: String(data.get("name") ?? ""),
+                  email: String(data.get("email") ?? ""),
+                  message: String(data.get("message") ?? ""),
+                };
+                setSending(true);
+                try {
+                  await submitContact(payload);
+                  setSent(true);
+                  toast.success("Thanks — we'll be in touch within one working day.");
+                  form.reset();
+                } catch {
+                  toast.error("Couldn't send your message. Please try again in a moment.");
+                } finally {
+                  setSending(false);
+                }
               }}
             >
               <div className="grid gap-5 sm:grid-cols-2">
