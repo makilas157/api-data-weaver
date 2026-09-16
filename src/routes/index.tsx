@@ -8,9 +8,17 @@ import { Reveal } from "@/components/Reveal";
 import { SectionHeading, SectionTag } from "@/components/SectionHeading";
 import { SocialSection } from "@/components/SocialSection";
 import { NavConstellation } from "@/components/NavConstellation";
-import { products, services, stats } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { productsQuery, servicesQuery, socialsQuery, statsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(servicesQuery),
+      context.queryClient.ensureQueryData(productsQuery),
+      context.queryClient.ensureQueryData(statsQuery),
+      context.queryClient.ensureQueryData(socialsQuery),
+    ]),
   head: () => ({
     meta: [
       { title: "Tevexxo — We build the tech your business runs on" },
@@ -33,6 +41,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { data: services } = useSuspenseQuery(servicesQuery);
+  const { data: products } = useSuspenseQuery(productsQuery);
+  const { data: stats } = useSuspenseQuery(statsQuery);
+
   return (
     <>
       <section className="relative flex min-h-[92vh] items-center overflow-hidden pt-24">
