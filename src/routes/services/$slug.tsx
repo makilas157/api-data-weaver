@@ -3,11 +3,11 @@ import { RouteSkeleton } from "@/components/RouteSkeleton";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { services } from "@/data/site";
+import { serviceQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/services/$slug")({
-  loader: ({ params }) => {
-    const item = services.find((s) => s.slug === params.slug);
+  loader: async ({ params, context }) => {
+    const item = await context.queryClient.ensureQueryData(serviceQuery(params.slug));
     if (!item) throw notFound();
     return item;
   },

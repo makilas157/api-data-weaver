@@ -3,11 +3,11 @@ import { RouteSkeleton } from "@/components/RouteSkeleton";
 import { ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { posts } from "@/data/site";
+import { postQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/blogs/$slug")({
-  loader: ({ params }) => {
-    const post = posts.find((p) => p.slug === params.slug);
+  loader: async ({ params, context }) => {
+    const post = await context.queryClient.ensureQueryData(postQuery(params.slug));
     if (!post) throw notFound();
     return post;
   },

@@ -3,11 +3,11 @@ import { RouteSkeleton } from "@/components/RouteSkeleton";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { products } from "@/data/site";
+import { productQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/products/$slug")({
-  loader: ({ params }) => {
-    const item = products.find((p) => p.slug === params.slug);
+  loader: async ({ params, context }) => {
+    const item = await context.queryClient.ensureQueryData(productQuery(params.slug));
     if (!item) throw notFound();
     return item;
   },
