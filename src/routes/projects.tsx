@@ -3,9 +3,11 @@ import { PageHeader } from "@/components/PageHeader";
 import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { projects } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { projectsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/projects")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
   head: () => ({
     meta: [
       { title: "Projects — Case studies & client work | Tevexxo" },
@@ -27,6 +29,8 @@ export const Route = createFileRoute("/projects")({
 });
 
 function ProjectsPage() {
+  const { data: projects } = useSuspenseQuery(projectsQuery);
+
   return (
     <>
       <PageHeader
@@ -49,7 +53,7 @@ function ProjectsPage() {
             />
           </Reveal>
           <Reveal variant="card" delay={300} className="mt-12">
-            <ProjectCarousel />
+            <ProjectCarousel projects={projects} />
           </Reveal>
         </div>
       </section>

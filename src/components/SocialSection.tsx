@@ -1,6 +1,7 @@
 import { ArrowRight, Facebook, Instagram, MessageCircle, Twitter } from "lucide-react";
 import { useRef } from "react";
-import { socials } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { socialsQuery } from "@/lib/api";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
 
@@ -8,6 +9,7 @@ const icons = [Instagram, MessageCircle, Facebook, Twitter];
 
 export function SocialSection() {
   const ref = useRef<HTMLDivElement>(null);
+  const { data: socials } = useSuspenseQuery(socialsQuery);
 
   return (
     <section

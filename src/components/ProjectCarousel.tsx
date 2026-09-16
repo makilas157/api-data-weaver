@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
-import { projects } from "@/data/site";
+import type { Project } from "@/data/site";
 import { Button } from "@/components/ui/button";
 
-export function ProjectCarousel() {
+export function ProjectCarousel({ projects }: { projects: Project[] }) {
   const track = useRef<HTMLDivElement>(null);
 
   const scrollBy = (dir: 1 | -1) => {
