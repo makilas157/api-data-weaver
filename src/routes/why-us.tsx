@@ -3,9 +3,11 @@ import { ArrowRight, Compass, Gauge, LifeBuoy, ShieldCheck, Sparkles, Users } fr
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { stats } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { statsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/why-us")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(statsQuery),
   head: () => ({
     meta: [
       { title: "Why Tevexxo — Senior teams, transparent delivery" },
@@ -83,6 +85,8 @@ const process = [
 ];
 
 function WhyUsPage() {
+  const { data: stats } = useSuspenseQuery(statsQuery);
+
   return (
     <>
       <PageHeader

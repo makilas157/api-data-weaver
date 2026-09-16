@@ -38,6 +38,7 @@ const details = [
 
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   return (
     <>
@@ -116,12 +117,12 @@ function ContactPage() {
                   placeholder="What are you building, and what does success look like?"
                 />
               </label>
-              <button type="submit" className="btn-solid">
-                Send message <ArrowRight className="h-4 w-4" />
+              <button type="submit" className="btn-solid" disabled={sending}>
+                {sending ? "Sending…" : "Send message"} <ArrowRight className="h-4 w-4" />
               </button>
               {sent ? (
                 <p className="text-xs text-accent">
-                  Message noted. Connect a backend later to deliver these to your inbox.
+                  Message sent — we&apos;ll reply within one working day.
                 </p>
               ) : null}
             </form>
