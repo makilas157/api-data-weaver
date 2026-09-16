@@ -2,9 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { posts } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { postsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/blogs/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
       { title: "Blog — Notes on building software | Tevexxo" },
@@ -34,6 +36,8 @@ function formatDate(d: string) {
 }
 
 function BlogsPage() {
+  const { data: posts } = useSuspenseQuery(postsQuery);
+
   return (
     <>
       <PageHeader

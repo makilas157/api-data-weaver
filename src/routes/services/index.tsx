@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CatalogCard } from "@/components/CatalogCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { services } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { servicesQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/services/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
   head: () => ({
     meta: [
       { title: "Services — Software engineering & design | Tevexxo" },
@@ -26,6 +28,8 @@ export const Route = createFileRoute("/services/")({
 });
 
 function ServicesPage() {
+  const { data: services } = useSuspenseQuery(servicesQuery);
+
   return (
     <>
       <PageHeader

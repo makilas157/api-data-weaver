@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CatalogCard } from "@/components/CatalogCard";
 import { PageHeader } from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { products } from "@/data/site";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { productsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/products/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery),
   head: () => ({
     meta: [
       { title: "Products — FlowDesk, Pulseboard & CartSuite | Tevexxo" },
@@ -26,6 +28,8 @@ export const Route = createFileRoute("/products/")({
 });
 
 function ProductsPage() {
+  const { data: products } = useSuspenseQuery(productsQuery);
+
   return (
     <>
       <PageHeader
